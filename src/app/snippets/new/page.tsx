@@ -1,10 +1,15 @@
-'use server';
-
 import { db } from '@/db';
+import { redirect } from 'next/dist/server/api-utils';
 
 export default function NewSnippet() {
-	async function submitHandler(formData: FormDataEntryValue) {
-		await db.snippet.create({ data: { title: formData.valueOf('title') } });
+	async function submitHandler(formData: FormData) {
+		'use server';
+		await db.snippet.create({
+			data: {
+				title: formData.get('title') as string,
+				code: formData.get('code') as string,
+			},
+		});
 	}
 
 	return (
