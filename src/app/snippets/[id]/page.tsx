@@ -2,12 +2,13 @@ import { db } from '@/db';
 import { notFound } from 'next/navigation';
 
 export default async function Detail({ params }: { params: { id: string } }) {
-	console.log(typeof params.id);
+	// await new Promise(r => setTimeout(r, 1000));
 	const snippetId = parseInt(params.id);
 	const snippet = await db.snippet.findFirst({ where: { id: snippetId } });
 	if (!snippet) {
 		return notFound();
 	}
+
 	return (
 		<div>
 			<div className='flex m-4 justify-between items-center'>
