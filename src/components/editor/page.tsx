@@ -1,14 +1,25 @@
-import Editor from '@/components/editor/page';
+'use client';
+import Editor from '@monaco-editor/react';
+import { Snippet } from '@prisma/client';
+import React, { useState } from 'react';
 
-export default function EditorPage(props: any) {
+export default function EditorPage({ snippet }: { snippet: Snippet }) {
+	const [editCode, setEditCode] = useState('');
+	const handleEditorChange = (value: string | undefined) => {
+		value = '';
+		setEditCode(value);
+	};
+
 	return (
 		<div>
-			{/* <Editor
-				height='90vh'
+			<Editor
+				height='40vh'
 				defaultLanguage='javascript'
-				defaultValue='// some comment'
+				theme='vs-dark'
+				defaultValue={snippet.code}
 				onChange={handleEditorChange}
-			/> */}
+				options={{ minimap: { enabled: false } }}
+			/>
 		</div>
 	);
 }
