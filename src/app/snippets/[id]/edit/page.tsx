@@ -1,5 +1,3 @@
-'use server';
-
 import { db } from '@/db';
 import { notFound } from 'next/navigation';
 import EditorPage from '@/components/editor/page';
