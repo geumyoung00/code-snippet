@@ -1,4 +1,5 @@
 import { db } from '@/db';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 export default async function Detail({ params }: { params: { id: string } }) {
@@ -14,7 +15,12 @@ export default async function Detail({ params }: { params: { id: string } }) {
 			<div className='flex m-4 justify-between items-center'>
 				<h1 className='text-xl font-bold'>{snippet.title}</h1>
 				<div className='flex gap-4'>
-					<button className='p-2 border rounded'>편집</button>
+					<Link
+						href={`/snippets/${snippetId}/edit`}
+						className='p-2 border rounded'
+					>
+						편집
+					</Link>
 					<button className='p-2 border rounded'>삭제</button>
 				</div>
 			</div>
