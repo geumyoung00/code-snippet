@@ -1,3 +1,4 @@
+'use server';
 import { db } from '@/db';
 import { redirect } from 'next/navigation';
 
@@ -11,4 +12,9 @@ export async function editSnipptAction(snippetId: number, snippetCode: string) {
 	});
 
 	redirect(`/snippets/${snippetId}`);
+}
+
+export async function deleteSnippetAction(snippetId: number) {
+	await db.snippet.delete({ where: { id: snippetId } });
+	redirect('/');
 }

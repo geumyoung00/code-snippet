@@ -1,6 +1,7 @@
 import { db } from '@/db';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import * as actions from '@/actions';
 
 export default async function Detail({ params }: { params: { id: string } }) {
 	// await new Promise(r => setTimeout(r, 1000));
@@ -9,6 +10,8 @@ export default async function Detail({ params }: { params: { id: string } }) {
 	if (!snippet) {
 		return notFound();
 	}
+
+	const deleteSnippetAction = actions.deleteSnippetAction.bind(null, snippetId);
 
 	return (
 		<div>
@@ -21,7 +24,9 @@ export default async function Detail({ params }: { params: { id: string } }) {
 					>
 						편집
 					</Link>
-					<button className='p-2 border rounded'>삭제</button>
+					<form action={deleteSnippetAction}>
+						<button className='p-2 border rounded'>삭제</button>
+					</form>
 				</div>
 			</div>
 			<pre className='p-3 border rounded bg-gray-200 border-gray-200'>
