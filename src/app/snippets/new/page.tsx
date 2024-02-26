@@ -1,19 +1,18 @@
-import { db } from '@/db';
+'use client';
+
+import * as actions from '@/actions';
+import { useFormState } from 'react-dom';
+import Error from './error';
 
 export default function NewSnippet() {
-	async function submitHandler(formData: FormData) {
-		'use server';
-		await db.snippet.create({
-			data: {
-				title: formData.get('title') as string,
-				code: formData.get('code') as string,
-			},
-		});
-	}
+	const [newSnippetState, newSnippetAction] = useFormState(
+		actions.createSnippetAction,
+		{ message: '' }
+	);
 
 	return (
 		<div>
-			<form action={submitHandler}>
+			<form action={newSnippetAction}>
 				<h3 className='font-bold m-3'>코드 스니펫 생성</h3>
 				<div className='flex flex-col gap-4'>
 					<div className='flex gap-4'>
@@ -37,6 +36,10 @@ export default function NewSnippet() {
 							className='border rounded p-2 w-full'
 						/>
 					</div>
+
+					{newSnippetState.message ? (
+						<Error message={newSnippetState.message} />
+					) : null}
 
 					<button type='submit' className='rounded w-full p-2 bg-blue-200'>
 						저장
