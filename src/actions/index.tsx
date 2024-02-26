@@ -1,12 +1,8 @@
 'use server';
 import { db } from '@/db';
 import { redirect } from 'next/navigation';
-import { type } from 'os';
 
 export async function editSnipptAction(snippetId: number, snippetCode: string) {
-	console.log('저장됨');
-	console.log('id__', snippetId + ' | ' + 'code__', snippetCode);
-
 	await db.snippet.update({
 		where: { id: snippetId },
 		data: { code: snippetCode },
@@ -20,25 +16,33 @@ export async function deleteSnippetAction(snippetId: number) {
 	redirect('/');
 }
 
-export async function createSnippetAction(
+export function createSnippetAction(
 	formState: { message: string },
 	formData: FormData
 ) {
-	const title = formData.get('title') as string;
-	const code = formData.get('code') as string;
+	const errorHandler = async () => {
+		const title = formData.get('title') as string;
+		const code = formData.get('code') as string;
 
-	await db.snippet.create({
-		data: {
-			title,
-			code,
-		},
-	});
+		if (typeof title !== 'string' || title.length < 3) {
+			throw new Error('제목을 확인하세요');
+		} else if (typeof code !== 'string' || code.length < 3) {
+			throw new Error('내용을 정확히 입력하세요');
+		} else {
+			await db.snippet.create({
+				data: {
+					title,
+					code,
+				},
+			});
 
-	if (typeof title !== 'string' || title.length < 2) {
-		return { message: '제목을 다시 입력해주세요' };
-	} else if (typeof code !== 'string' || code.length < 5) {
-		return { message: '내용을 정확히 입력해주세요' };
+			return { message: '' };
+		}
+	};
+
+	try {
+		errorHandler();
+	} catch (error) {
+		console.log(error);
 	}
-
-	return redirect('/');
 }

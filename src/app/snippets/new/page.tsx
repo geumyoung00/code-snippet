@@ -4,7 +4,7 @@ import * as actions from '@/actions';
 import { useFormState } from 'react-dom';
 import Error from './error';
 
-export default function NewSnippet() {
+export default function NewSnippet(sni) {
 	const [newSnippetState, newSnippetAction] = useFormState(
 		actions.createSnippetAction,
 		{ message: '' }
@@ -37,9 +37,7 @@ export default function NewSnippet() {
 						/>
 					</div>
 
-					{newSnippetState.message ? (
-						<Error message={newSnippetState.message} />
-					) : null}
+					{newSnippetState.message ? <Error message={newSnippetState} /> : null}
 
 					<button type='submit' className='rounded w-full p-2 bg-blue-200'>
 						저장
