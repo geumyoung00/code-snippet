@@ -1,4 +1,5 @@
 'use server';
+
 import { db } from '@/db';
 import { redirect } from 'next/navigation';
 
@@ -17,17 +18,17 @@ export async function deleteSnippetAction(snippetId: number) {
 }
 
 export function createSnippetAction(
-	formState: { message: string },
-	formData: FormData
+	formData: FormData,
+	formState: { message: string }
 ) {
-	const errorHandler = async () => {
-		const title = formData.get('title') as string;
-		const code = formData.get('code') as string;
+	async function errorHandler() {
+		const title = formData.get('title');
+		const code = formData.get('code');
 
 		if (typeof title !== 'string' || title.length < 3) {
-			throw new Error('제목을 확인하세요');
+			return { message: '제목을 확인하세요.' };
 		} else if (typeof code !== 'string' || code.length < 3) {
-			throw new Error('내용을 정확히 입력하세요');
+			return { message: '내용을 정확히 입력해주세요.' };
 		} else {
 			await db.snippet.create({
 				data: {
@@ -35,14 +36,12 @@ export function createSnippetAction(
 					code,
 				},
 			});
-
-			return { message: '' };
 		}
-	};
+	}
 
 	try {
 		errorHandler();
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 }
