@@ -17,11 +17,11 @@ export async function deleteSnippetAction(snippetId: number) {
 	redirect('/');
 }
 
-export function createSnippetAction(
-	formData: FormData,
-	formState: { message: string }
+export async function createSnippetAction(
+	formState: { message: string },
+	formData: FormData
 ) {
-	async function errorHandler() {
+	try {
 		const title = formData.get('title');
 		const code = formData.get('code');
 
@@ -37,11 +37,12 @@ export function createSnippetAction(
 				},
 			});
 		}
+	} catch (error) {
+		if (error instanceof Error) {
+			return { message: error.message };
+		}
+		return { message: '잠시 후 다시 시도해주세요.' };
 	}
 
-	try {
-		errorHandler();
-	} catch (error) {
-		console.error(error);
-	}
+	redirect('/');
 }
