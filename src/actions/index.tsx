@@ -1,6 +1,6 @@
 'use server';
-
 import { db } from '@/db';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function editSnipptAction(snippetId: number, snippetCode: string) {
@@ -9,11 +9,13 @@ export async function editSnipptAction(snippetId: number, snippetCode: string) {
 		data: { code: snippetCode },
 	});
 
+	revalidatePath(`/snippets/${snippetId}`);
 	redirect(`/snippets/${snippetId}`);
 }
 
 export async function deleteSnippetAction(snippetId: number) {
 	await db.snippet.delete({ where: { id: snippetId } });
+	revalidatePath('/');
 	redirect('/');
 }
 
@@ -44,5 +46,6 @@ export async function createSnippetAction(
 		return { message: '잠시 후 다시 시도해주세요.' };
 	}
 
+	revalidatePath('/');
 	redirect('/');
 }
