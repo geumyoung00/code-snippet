@@ -15,6 +15,7 @@ export async function editSnipptAction(snippetId: number, snippetCode: string) {
 
 export async function deleteSnippetAction(snippetId: number) {
 	await db.snippet.delete({ where: { id: snippetId } });
+
 	revalidatePath('/');
 	redirect('/');
 }
